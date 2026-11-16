@@ -8,5 +8,7 @@ def page(request: Request):
     return request.app.state.templates.TemplateResponse(request, "m1_logs.html", {"title": "日志采信", "data": data})
 
 @router.post("/api/logs/import")
-def api(payload: dict = Body(default={})):
-    return execute(payload or None)
+def api(request: Request, payload: dict = Body(default={})):
+    data = payload or {}
+    data.setdefault("store", request.app.state.store)
+    return execute(data)

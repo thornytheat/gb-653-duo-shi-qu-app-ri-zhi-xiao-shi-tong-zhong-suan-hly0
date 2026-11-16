@@ -15,7 +15,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings.from_env()
     app = FastAPI(title="多时区应用日志小时桶重算", version=settings.rule_version)
     app.state.settings = settings
-    app.state.store = Store(settings.db_path)
+    app.state.store = Store(settings.db_path, salt=settings.withdraw_salt)
     app.state.templates = web.templates
     app.mount("/static", StaticFiles(directory=str(web.BASE / "static")), name="static")
     for module in (m1_handler, m2_handler, m3_handler, m4_handler, m5_handler, m6_handler,):
